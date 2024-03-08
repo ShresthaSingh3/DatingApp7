@@ -35,6 +35,8 @@ namespace APIServices
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+
+            //return new JwtSecurityTokenHandler().CreateEncodedJwt(tokenDescriptor);
         }
     }
 }
