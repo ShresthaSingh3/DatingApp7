@@ -47,7 +47,7 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    SharedModule,
+    SharedModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

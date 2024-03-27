@@ -42,7 +42,11 @@ namespace API.Controllers
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
+<<<<<<< HEAD
             if ( user == null) return NotFound();
+=======
+            if(user == null) return NotFound();
+>>>>>>> ff13ddfc743b9c657a137e716d8dff0724be10d7
 
             _mapper.Map(memberUpdateDto, user);
 
