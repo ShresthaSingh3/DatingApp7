@@ -43,7 +43,7 @@ namespace API.Data
         {
             var result = await _context.Users.ToListAsync();
             var record =await _context.Users
-                //.Include(p => p.Photos)
+                .Include(p => p.Photos)
                 .SingleOrDefaultAsync(x => x.UserName.ToLower() == username.ToLower());
             return record;
         }
