@@ -41,6 +41,7 @@ builder.Configuration.GetSection("CloudinarySettings");
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<LogUserActivity>();
 
 var app = builder.Build();
 
