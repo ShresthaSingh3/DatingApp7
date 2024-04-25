@@ -1,0 +1,18 @@
+using API.DTOs;
+using API.Entities;
+using API.Helpers;
+
+namespace API.Interfaces
+{
+    public interface IMessageRepository
+    {
+        void AddMessage(Message message);
+        void DeleteMessage(Message message);
+        Task<Message> GetMessage(int id);
+        Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams);
+        //To return list of msgs between two individual users.
+        Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string RecipientUserName); 
+        Task<bool> SaveAllAsync();
+    }
+
+}
