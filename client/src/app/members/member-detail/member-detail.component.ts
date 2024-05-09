@@ -8,6 +8,7 @@ import { MembersService } from 'src/app/_services/members.service';
 import { MemberMessagesComponent } from '../member-messages/member-messages.component';
 import { MessageService } from 'src/app/_services/message.service';
 import { Message } from 'src/app/_models/message';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-member-detail',
@@ -23,7 +24,7 @@ export class MemberDetailComponent implements OnInit{
   messages: Message[] = [];
 
   constructor(private memberService: MembersService, private route: ActivatedRoute, 
-    private messageService: MessageService) { }
+    private messageService: MessageService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     //this.loadMember();
@@ -65,5 +66,11 @@ export class MemberDetailComponent implements OnInit{
     if(this.memberTabs) {
       this.memberTabs.tabs.find(x => x.heading === heading)!.active = true;
     }
+  }
+
+  addLike(member: Member) {
+    this.memberService.addLike(member.userName).subscribe({
+      next: () => this.toastr.success('You have liked ' + member.knownAs)
+    })
   }
 }

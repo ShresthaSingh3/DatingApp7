@@ -1,11 +1,13 @@
 using System.Text;
 using API.Data;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using API.Middleware;
 using API.Services;
 using APIServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,6 +25,14 @@ builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+            })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddEntityFrameworkStores<DataContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 
@@ -45,6 +55,12 @@ builder.Services.AddScoped<LogUserActivity>();
 builder.Services.AddScoped<ILikesRepository, LikesRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
+builder.Services.AddAuthorization(opt =>
+    {
+        opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+        opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -66,8 +82,10 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
+    await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
 {

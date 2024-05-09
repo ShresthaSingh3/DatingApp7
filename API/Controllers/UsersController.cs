@@ -52,13 +52,11 @@ namespace API.Controllers
             return await _userRepository.GetMemberAsync(username);
         }
 
-        [HttpPut]
+        [HttpPut("updateuser")]  //https://localhost:5031/api/users/updateuser
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
             var user = await _userRepository.GetUserByUsernameAsync(username);
-
-            //var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
             
             if ( user == null) return NotFound();
 
@@ -72,7 +70,7 @@ namespace API.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
             //var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
