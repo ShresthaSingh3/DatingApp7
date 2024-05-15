@@ -14,6 +14,10 @@ namespace API.Data
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
+        public UserRepository()
+        {
+        }
+
         public UserRepository(DataContext context, IMapper mapper)
         {
             _context = context;
@@ -66,6 +70,13 @@ namespace API.Data
             return record;
         }
 
+        public async Task<string> GetUserGender(string username)
+        {
+            return await _context.Users
+                .Where(x => x.UserName == username)
+                .Select(x => x.Gender).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await _context.Users
@@ -73,10 +84,10 @@ namespace API.Data
                 .ToListAsync();
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+        // public async Task<bool> SaveAllAsync()
+        // {
+        //     return await _context.SaveChangesAsync() > 0;
+        // }
 
         public void Update(AppUser user)
         {

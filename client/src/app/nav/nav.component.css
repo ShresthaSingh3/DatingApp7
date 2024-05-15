@@ -7,3 +7,10 @@ img{
     border: 2px solid white;
     display: inline;
 }
+
+#home{
+    font-size: larger;
+    font-style: italic;
+    font-weight: 900;
+    
+}
